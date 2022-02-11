@@ -8,7 +8,8 @@ use App\Repositories\PostRepositoryInterface;
 
 class PostRepository implements PostRepositoryInterface
 {
-    public function all() {
+    public function all() 
+    {
         return Post::orderBy('created_at', 'desc')
                     ->with('author')
                     ->where('is_published', 1)
@@ -79,23 +80,25 @@ class PostRepository implements PostRepositoryInterface
         $counter = 0;
 
         DB::beginTransaction();
-            while (($line = fgetcsv($f)) !== FALSE) {  //$line = ['', '']
-                // \Log::info($line);
+            while (($line = fgetcsv($f)) !== FALSE) {
+
                 $counter++;
                 if($counter != 1) {
                     
                     if($line[0] == '' || $line[1]=='') {
                         DB::rollback();
-                        // \Log::info($line);
-                    }else {                    
+                    }else { 
+
                         Post::create([
                             'title' => $line[0],
                             'content' => $line[1],
                             'user_id' => auth()->user()->id,
                         ]);
                         DB::commit();
+
                     }
                 }
+
               }
         
           fclose($f);
@@ -125,18 +128,14 @@ class PostRepository implements PostRepositoryInterface
         $recordsTotal = $posts->count();
         $recordsFiltered = $recordsTotal;
         
-        $columns = $request->columns; // [ 0 => id[], 1 => title[], ...... ]
-        $orders = $request->order[0]; // [ 0 => [ columns: 0, dir: asc ] ]
+        $columns = $request->columns; 
+        $orders = $request->order[0];
         $column_index = $request->order[0]['column'];
         $column_name = $columns[$column_index]['data']; 
         $direction = $request->order[0]['dir'];
-        // OrderBy($table_column, $dir)
-        
         $start = $request->start;
         $limit = $request->length;
-        // skip($start)->take($limit)
         $search = $request->search['value'];
-        \Log::info($start);
         
         if(!$search) {
 
@@ -146,27 +145,8 @@ class PostRepository implements PostRepositoryInterface
                 $result = $posts->sortByDesc($column_name, SORT_NATURAL | SORT_FLAG_CASE)->skip($start)->take($limit)->values();
             }
 
-            // $result = Post::where('user_id', auth()->user()->id)
-            //         ->skip($start)
-            //         ->take($limit)
-            //         ->orderBy($column_name, $direction)
-            //         ->get();
-
         } else {
 
-            // $result = $posts->filter(function ($post, $key) {
-            //     \Log::info([$post, $key]);
-            // });
-            // $result = Post::where('user_id', auth()->user()->id)
-            //         ->skip($start)
-            //         ->skip($start)
-            //         ->take($limit)
-            //         ->where( 'id' , 'ILIKE', '%'.$search.'%')
-            //         ->orWhere('title', 'ILIKE', '%'.$search.'%')
-            //         ->orWhere('content', 'ILIKE', '%'.$search.'%')
-            //         ->orderBy($column_name, $direction)
-            //         ->get();
-            
             $result = Post::where('user_id', auth()->user()->id)
                             ->where(function($q) use($search) {
                                 $q->orWhere('title', 'ILIKE', '%'.$search.'%')
@@ -175,10 +155,7 @@ class PostRepository implements PostRepositoryInterface
                             })
                             ->orderBy($column_name, $direction)
                             ->get();
-            
-            \Log::info($result);
         
-
             $recordsFiltered = Post::where('user_id', auth()->user()->id)
                                     ->where(function($q) use($search) {
                                         $q->orWhere('title', 'ILIKE', '%'.$search.'%')

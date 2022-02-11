@@ -26,7 +26,6 @@ class PostController extends Controller
     {
         $posts = $this->post_repository->all();
 
-        // return $posts;
         return view('allposts', compact('posts'));
     }
 
@@ -40,11 +39,6 @@ class PostController extends Controller
         $this->post_repository->storePost($request);
 
         return redirect('/posts/all')->with('success', 'New post created successfully.');
-    }
-
-    public function show(Post $post)
-    {
-        //
     }
 
     public function edit(Post $post)

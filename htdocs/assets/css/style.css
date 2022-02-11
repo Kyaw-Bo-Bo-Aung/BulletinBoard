@@ -1,0 +1,57 @@
+main{
+  height: 100vh;
+}
+
+.flash-message {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  z-index: 99;
+}
+
+.login-card {
+  max-width: 500px;
+}
+
+.post-duration {
+  font-size: 0.8rem;
+}
+
+.post-edit-btn:hover, .post-delete-btn:hover {
+  background-color: #ddd;
+  border-radius: 5px;
+}
+
+.post-delete-btn {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+.post-publish-btn {
+  font-size: 0.8rem;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+.post-publish-btn:hover {
+  background-color: #ddd;
+  border-radius: 5px;
+  padding: 0 0.5rem 0 0;
+}
+
+.csv-card {
+  border: 3px dashed rgba(0, 0, 0, 0.3);
+}
+
+#close-preview-file-btn {
+  position: absolute;
+  right: -1rem;
+  margin-right: 0rem;
+  top: -1rem;
+}
+
+#logout-btn {
+  cursor: pointer;
+}
